@@ -3,9 +3,7 @@
 
 import os
 import sys
-import traceback
 reload(sys).setdefaultencoding("utf-8")
-debug = True
 
 def main():
 	
@@ -20,11 +18,4 @@ if __name__ == '__main__':
 		root = os.path.dirname(os.path.abspath(core))
 		if root:
 			os.chdir(root)
-	try:
-		main()
-	except:
-		if debug:
-			try:
-				print traceback.print_exc()
-			except:
-				pass
+	main()
