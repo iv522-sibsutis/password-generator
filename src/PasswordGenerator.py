@@ -5,6 +5,14 @@ import os
 import sys
 reload(sys).setdefaultencoding("utf-8")
 
+enl = list("""abcdefghijklmnopqrstuvwxyz""")
+ENl = list("""ABCDEFGHIJKLMNOPQRSTUVWXYZ""")
+dig = list("""0123456789""")
+smb = list("""~!@#[]$%^&*()_+=-"'|\/`<>?,.{};:№""")
+rul = list("""абвгдеёжзийклмнопрстуфхцчшщъыьэюя""")
+RUl = list("""АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ""")
+isl = list("""O0СсОоНКХхЗЕУуВАаТМРр""")
+
 def main():
 	
 	return
