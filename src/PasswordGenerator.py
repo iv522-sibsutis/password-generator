@@ -60,6 +60,22 @@ def ArgParse():
 	#TODO Проверка аргументов
 	return results
 
+def printPasswordList(pList):
+	rows, columns = os.popen('stty size', 'r').read().split()
+	rows = int(rows)
+	columns = int(columns)
+	line = 0;
+	for pasword in pList:
+		sys.stdout.write(pasword)
+		line += len(pasword);
+		if line + len(pasword) + 4 > columns:
+			sys.stdout.write("\n")
+			line = 0
+		else:
+			sys.stdout.write("  ")
+			continue
+	sys.stdout.flush()
+
 def main():
 	
 	return
