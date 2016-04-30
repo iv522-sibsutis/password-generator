@@ -4,6 +4,7 @@
 import os
 import sys
 import argparse
+import random
 
 reload(sys).setdefaultencoding("utf-8")
 
@@ -76,6 +77,15 @@ def printPasswordList(pList, rows, columns):
 		else:
 			sys.stdout.write("  ")
 	sys.stdout.flush()
+
+def genpwd(count, leng, dl):
+	plist = []
+	for i in xrange(count):
+		pstr = ""
+		for j in xrange(leng):
+			pstr += random.choice(dl)
+		plist.append(pstr)
+	return plist
 
 def main():
 	
