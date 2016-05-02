@@ -55,16 +55,15 @@ def ArgParse():
 	parser.add_argument('--version', action='version', version='%(prog)s 1.0')
 	results = parser.parse_args()
 
+#	if results.Length == :
+#		results.Length = 10
+	print(results.Length)
+
 #	results.Length = (int)results.Length
 
 	#print 'Length   =', results.Length
 	#TODO Проверка аргументов
 	return results
-
-def printPasswordList(pList):
-	rows, columns = os.popen('stty size', 'r').read().split()
-	rows = int(rows)
-	columns = int(columns)
 
 def printPasswordList(pList, rows, columns):
 	line = 0;
@@ -78,17 +77,26 @@ def printPasswordList(pList, rows, columns):
 			sys.stdout.write("  ")
 	sys.stdout.flush()
 
-def genpwd(count, leng, dl):
+def genpwd(count, param, dl):
 	plist = []
 	for i in xrange(count):
 		pstr = ""
-		for j in xrange(leng):
+		for j in xrange(param.Length):
 			pstr += random.choice(dl)
 		plist.append(pstr)
 	return plist
 
 def main():
+	rows, columns = os.popen('stty size', 'r').read().split()
+	rows = int(rows)
+	columns = int(columns)
+	Params = ArgParse()
 	
+#	if 
+	
+	pascount = ((columns) / (Params.Length+2)) * (rows-1)
+	pwlist = genpwd(pascount, Params, dig+enl+ENl)
+	printPasswordList(pwlist, rows, columns)
 	return
 
 
