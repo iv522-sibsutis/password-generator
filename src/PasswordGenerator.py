@@ -22,8 +22,8 @@ def ArgParse():
 	# -l	Задать длину паролей
 	parser.add_argument("-l", type=int, default=8, help="Длина паролей", dest='Length')
 
-	# -M	Генерация паролей по шаблону
-	parser.add_argument("-M", type=str, default="", help="Генерация паролей по шаблону", dest='Mask')
+#	# -M	Генерация паролей по шаблону
+#	parser.add_argument("-M", type=str, default="", help="Генерация паролей по шаблону", dest='Mask')
 
 	# -c	Включить в пароль хотя бы одну прописную (большую) букву
 	parser.add_argument('-c', action='store_true', default=False, dest='OneLargeLetters', help='Включить в пароль хотя бы одну прописную (большую) букву')
@@ -55,21 +55,33 @@ def ArgParse():
 	parser.add_argument('--version', action='version', version='%(prog)s 1.0')
 	results = parser.parse_args()
 
-#	if results.Length == :
-#		results.Length = 10
-	print(results.Length)
+	minlit = 1
 
-#	results.Length = (int)results.Length
+	if (results.OneDigit) and (results.NoOneDigit):
+		parser.error("Что делать с цифрами?")
+	if (results.OneLargeLetters) and (results.NoLargeLetters):
+		parser.error("Что делать с большими буквами?")
 
-	#print 'Length   =', results.Length
-	#TODO Проверка аргументов
+	if results.OneLargeLetters:
+		minlit += 1
+	if results.OneDigit:
+		minlit += 1
+	if results.SpecialSymbols:
+		minlit += 1
+	if results.RussianLetters:
+		minlit += 1
+
+	if results.Length + 1 < minlit:
+		parser.error("Нужно увеличить длину пароля")
+	if results.Length < 1:
+		parser.error("Ошибочный параметр -l")
 	return results
 
 def printPasswordList(pList, rows, columns):
 	line = 0;
 	for pasword in pList:
 		sys.stdout.write(pasword)
-		line += len(pasword) +2
+		line += len(pasword) + 2
 		if (line + len(pasword) + 1) >= columns:
 			sys.stdout.write("\n")
 			line = 0
@@ -92,7 +104,7 @@ def main():
 	columns = int(columns)
 	Params = ArgParse()
 	
-#	if 
+#	if Params.
 	
 	pascount = ((columns) / (Params.Length+2)) * (rows-1)
 	pwlist = genpwd(pascount, Params, dig+enl+ENl)
