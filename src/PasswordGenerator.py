@@ -11,7 +11,7 @@ reload(sys).setdefaultencoding("utf-8")
 enl = list("""abcdefghijklmnopqrstuvwxyz""")
 ENl = list("""ABCDEFGHIJKLMNOPQRSTUVWXYZ""")
 dig = list("""0123456789""")
-smb = list("""~!@#[]$%^&*()_+=-"'|\/`<>?,.{};:№""")
+smb = list("""~!@#[]$%^&*()_+=-"'|\/`<>?,.{};:""")
 rul = list("""абвгдеёжзийклмнопрстуфхцчшщъыьэюя""")
 RUl = list("""АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ""")
 isl = list("""O0СсОоНКХхЗЕУуВАаТМРр""")
@@ -89,12 +89,47 @@ def printPasswordList(pList, rows, columns):
 			sys.stdout.write("  ")
 	sys.stdout.flush()
 
-def genpwd(count, param, dl):
+def genpwd(count, param):
+	def genlist(par):
+		symbollist = dig + enl + ENl
+		if par.SpecialSymbols:
+			symbollist += smb
+		if par.RussianLetters:
+			symbollist += RUl + rul
+		if par.NoLargeLetters:
+			symbollist = list(set(symbollist) - set(ENl) - set(RUl))
+		if par.NoOneDigit:
+			symbollist = list(set(symbollist) - set(dig))
+		if par.NoAmbiguous:
+			symbollist = list(set(symbollist) - set(isl))
+		random.shuffle(symbollist)		
+		return symbollist
+
+	def pverification(password, par):
+		if par.OneLargeLetters:
+			if par.RussianLetters:
+				if 1 > len(set(password) & set(ENl) & set(RUl)):
+					return 0
+			else:
+				if 1 > len(set(password) & set(ENl)):
+					return 0
+		if par.OneDigit:
+			if 1 > len(set(password) & set(dig)):
+				return 0
+		if par.SpecialSymbols:
+			if 1 > len(set(password) & set(smb)):
+				return 0
+		return 1
+
+	SymbolList = genlist(param)
 	plist = []
 	for i in xrange(count):
-		pstr = ""
-		for j in xrange(param.Length):
-			pstr += random.choice(dl)
+		while 1:
+			pstr = ""
+			for j in xrange(param.Length):
+				pstr += random.choice(SymbolList)
+			if pverification(pstr, param):
+				break
 		plist.append(pstr)
 	return plist
 
@@ -104,10 +139,8 @@ def main():
 	columns = int(columns)
 	Params = ArgParse()
 	
-#	if Params.
-	
-	pascount = ((columns) / (Params.Length+2)) * (rows-1)
-	pwlist = genpwd(pascount, Params, dig+enl+ENl)
+	pascount = ((columns) / (Params.Length + 2)) * (rows-1)
+	pwlist = genpwd(pascount, Params)
 	printPasswordList(pwlist, rows, columns)
 	return
 
