@@ -8,13 +8,13 @@ import random
 
 reload(sys).setdefaultencoding("utf-8")
 
-enl = list("""abcdefghijklmnopqrstuvwxyz""")
-ENl = list("""ABCDEFGHIJKLMNOPQRSTUVWXYZ""")
-dig = list("""0123456789""")
-smb = list("""~!@#[]$%^&*()_+=-"'|\/`<>?,.{};:""")
-rul = list("""абвгдеёжзийклмнопрстуфхцчшщъыьэюя""")
-RUl = list("""АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ""")
-isl = list("""O0СсОоНКХхЗЕУуВАаТМРр""")
+enl = list(u"""abcdefghijklmnopqrstuvwxyz""")
+ENl = list(u"""ABCDEFGHIJKLMNOPQRSTUVWXYZ""")
+dig = list(u"""0123456789""")
+smb = list(u"""~!@#[]$%^&*()_+=-"'|\/`<>?,.{};:""")
+rul = list(u"""абвгдеёжзийклмнопрстуфхцчшщъыьэюя""")
+RUl = list(u"""АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ""")
+isl = list(u"""O0СсОоНКХхЗЕУуВАаТМРр""")
 
 def ArgParse():
 	parser = argparse.ArgumentParser()
@@ -120,11 +120,13 @@ def genpwd(count, param):
 			if 1 > len(set(password) & set(smb)):
 				return 0
 		return 1
-
+		
 	SymbolList = genlist(param)
+	l = len(SymbolList) - 1;
 	plist = []
 	for i in xrange(count):
 		while 1:
+		#	pstr = ''.join([random.choice(SymbolList) for x in xrange(param.Length)])
 			pstr = ""
 			for j in xrange(param.Length):
 				pstr += random.choice(SymbolList)
@@ -134,14 +136,23 @@ def genpwd(count, param):
 	return plist
 
 def main():
-	rows, columns = os.popen('stty size', 'r').read().split()
+	try:
+		rows, columns = os.popen('stty size', 'r').read().split()
+	except:
+		rows = 20
+		columns = 80
 	rows = int(rows)
 	columns = int(columns)
 	Params = ArgParse()
 	
 	pascount = ((columns) / (Params.Length + 2)) * (rows-1)
 	pwlist = genpwd(pascount, Params)
-	printPasswordList(pwlist, rows, columns)
+	
+	if Params.OneColumn:
+		for x in pwlist:
+			print x
+	else:
+		printPasswordList(pwlist, rows, columns)
 	return
 
 
